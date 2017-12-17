@@ -27,7 +27,7 @@ function(format)
 		cmake_parse_arguments(CF "" "" "FILES" ${ARGN})
 
 		foreach(file ${CF_FILES})
-			string(REPLACE "/" "__" CURRENT_SUBTARGET ${file})
+			string(REPLACE "/" "__" CURRENT_SUBTARGET ${CMAKE_CURRENT_SOURCE_DIR}/${file})
 			set(CF_SUBTARGETS ${CF_SUBTARGETS} format_subtarget_${CURRENT_SUBTARGET})
 			add_custom_target(format_subtarget_${CURRENT_SUBTARGET} 
 			                  COMMAND ${CLANG_FORMAT_EXE} -i -style=file ${CMAKE_CURRENT_SOURCE_DIR}/${file})

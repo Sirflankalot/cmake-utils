@@ -59,7 +59,7 @@ function(configure_linter)
 
 	configure_file(${THIS_DIR}/../lint.sh lint.sh @ONLY)
 	execute_process(COMMAND chmod +x ${CMAKE_BINARY_DIR}/lint.sh)
-
+	
 	set(FILES_TO_LINT ${FILES_TO_LINT} CACHE INTERNAL "FILES_TO_LINT" FORCE)
 	set(DIRECTORIES_TO_LINT ${DIRECTORIES_TO_LINT} CACHE INTERNAL "DIRECTORIES_TO_LINT" FORCE)
 endfunction(configure_linter)
