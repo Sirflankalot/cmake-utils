@@ -1,0 +1,3 @@
+[submodule "clang-tidy-manager"]
+	path = clang-tidy-manager
+	url = https://github.com/Sirflankalot/clang-tidy-manager.git
