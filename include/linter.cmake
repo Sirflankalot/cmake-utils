@@ -1,24 +1,27 @@
 find_program(
-	RUN_CLANG_TIDY_EXE
-	NAMES "run-clang-tidy"
-	      "run-clang-tidy.py"
-	      "run-clang-tidy-6.0.py"
-	      "run-clang-tidy-5.0.py"
-	      "run-clang-tidy-4.0.py"
-	      "run-clang-tidy-3.9.py"
-	      "run-clang-tidy-3.8.py"
-	      "run-clang-tidy-3.7.py"
-	      "run-clang-tidy-3.6.py"
-	      "run-clang-tidy-3.5.py"
-	DOC "Path to run-clang-tidy executable")
-if(NOT RUN_CLANG_TIDY_EXE)
+	CLANG_TIDY_EXE
+	NAMES "clang-tidy"
+	      "clang-tidy-7.0"
+	      "clang-tidy-6.0"
+	      "clang-tidy-5.0"
+	      "clang-tidy-4.0"
+	      "clang-tidy-3.9"
+	      "clang-tidy-3.8"
+	      "clang-tidy-3.7"
+	      "clang-tidy-3.6"
+	      "clang-tidy-3.5"
+	DOC "Path to clang-tidy executable")
+
+if(NOT CLANG_TIDY_EXE)
 	message(STATUS "run-clang-tidy not found.")
 else()
-	message(STATUS "run-clang-tidy found: ${RUN_CLANG_TIDY_EXE}")
+	message(STATUS "run-clang-tidy found: ${CLANG_TIDY_EXE}")
 	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()
 
 set(THIS_DIR ${CMAKE_CURRENT_LIST_DIR})
+
+set(CLANG_TIDY_MANAGER "${THIS_DIR}/../clang-tidy-manager/clang-tidy-manager.py")
 
 if (NOT FILES_TO_LINT) 
 	set(FILES_TO_LINT " " CACHE INTERNAL "FILES_TO_LINT" FORCE)
@@ -36,7 +39,7 @@ function(lint)
 endfunction(lint)
 
 function(add_linted_subdirectory)
-	set(DIRECTORIES_TO_LINT ${DIRECTORIES_TO_LINT} ${ARGN} CACHE INTERNAL "DIRECTORIES_TO_LINT" FORCE)
+	set(DIRECTORIES_TO_LINT ${DIRECTORIES_TO_LINT} "${CMAKE_CURRENT_SOURCE_DIR}/${ARGN}" CACHE INTERNAL "DIRECTORIES_TO_LINT" FORCE)
 	add_subdirectory(${ARGN})
 endfunction(add_linted_subdirectory)
 
@@ -49,16 +52,13 @@ function(configure_linter)
 	endforeach()
 
 	foreach(dir ${DIRECTORIES_TO_LINT})
-		if(${DIR_TO_LINT_STR})
-			set(DIR_TO_LINT_STR "${DIR_TO_LINT_STR}|${dir}")
-		else()
-			set(DIR_TO_LINT_STR "${dir}")
-		endif()
+		set(DIR_TO_LINT_STR "${DIR_TO_LINT_STR} ${dir}")
 	endforeach()
-	set(DIR_TO_LINT_STR "(${DIR_TO_LINT_STR})")
 
-	configure_file(${THIS_DIR}/../lint.sh lint.sh @ONLY)
-	execute_process(COMMAND chmod +x ${CMAKE_BINARY_DIR}/lint.sh)
+	# configure_file(${THIS_DIR}/../lint.sh lint.sh @ONLY)
+	# execute_process(COMMAND chmod +x ${CMAKE_BINARY_DIR}/lint.sh)
+
+	add_custom_target(lint ${CLANG_TIDY_MANAGER} -p "${CMAKE_BINARY_DIR}" --path-to-clang-tidy=${CLANG_TIDY_EXE} --folders ${DIRECTORIES_TO_LINT} VERBATIM USES_TERMINAL)	
 	
 	set(FILES_TO_LINT ${FILES_TO_LINT} CACHE INTERNAL "FILES_TO_LINT" FORCE)
 	set(DIRECTORIES_TO_LINT ${DIRECTORIES_TO_LINT} CACHE INTERNAL "DIRECTORIES_TO_LINT" FORCE)
