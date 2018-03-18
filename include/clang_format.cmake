@@ -23,7 +23,7 @@ if(CLANG_FORMAT_EXE)
 endif()
 
 function(format)
-	if (CLANG_FORMAT_EXE)
+	if (CLANG_FORMAT_EXE AND UNIX)
 		cmake_parse_arguments(CF "" "" "FILES" ${ARGN})
 
 		foreach(file ${CF_FILES})
