@@ -33,7 +33,7 @@ function(format)
 			else()
 				set(CURRENT_FILE "${file}")
 			endif()
-			message(STATUS "${CURRENT_FILE}")
+#			message(STATUS "${CURRENT_FILE}")
 			string(REPLACE  "/" "__" CURRENT_SUBTARGET ${CURRENT_FILE})
 			set(CF_SUBTARGETS ${CF_SUBTARGETS} format_subtarget_${CURRENT_SUBTARGET})
 			add_custom_target(format_subtarget_${CURRENT_SUBTARGET} 
