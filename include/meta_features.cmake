@@ -15,18 +15,3 @@ else()
 	endif()
 endif()
 
-add_library(options::iterator_debug_level_0 INTERFACE IMPORTED)
-add_library(options::iterator_debug_level_1 INTERFACE IMPORTED)
-add_library(options::iterator_debug_level_2 INTERFACE IMPORTED)
-
-if (MSVC)
-	set_target_properties(options::iterator_debug_level_0 PROPERTIES
-		INTERFACE_COMPILE_DEFINITIONS "_ITERATOR_DEBUG_LEVEL=0"
-	)
-	set_target_properties(options::iterator_debug_level_1 PROPERTIES
-		INTERFACE_COMPILE_DEFINITIONS "_ITERATOR_DEBUG_LEVEL=1"
-	)
-	set_target_properties(options::iterator_debug_level_2 PROPERTIES
-		INTERFACE_COMPILE_DEFINITIONS "_ITERATOR_DEBUG_LEVEL=2"
-	)
-endif()
